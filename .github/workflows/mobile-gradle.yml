@@ -25,8 +25,8 @@ on:
       project-type:
         required: false
         type: string
-        default: "auto"
-        description: "Project type (auto|react-native|kotlin)"
+        default: "react-native"
+        description: "Project type (react-native)"
       gradle-task:
         required: false
         type: string
@@ -80,11 +80,7 @@ jobs:
 
           STACK="${INPUT_TYPE}"
           if [ "${STACK}" = "auto" ]; then
-            if [ -f "package.json" ]; then
-              STACK="react-native"
-            else
-              STACK="kotlin"
-            fi
+            STACK="react-native"
           fi
 
           if [ -f "yarn.lock" ]; then
@@ -172,18 +168,6 @@ jobs:
 
           echo "gradle_dir=${GRADLE_DIR}" >> "$GITHUB_OUTPUT"
           echo "? Using gradle wrapper directory: ${GRADLE_DIR}"
-
-      - name: Normalize Kotlin Version
-        run: |
-          if [ -f "${{ steps.gradle.outputs.gradle_dir }}/gradle.properties" ]; then
-            TARGET_PROPS="${{ steps.gradle.outputs.gradle_dir }}/gradle.properties"
-            if grep -q '^kotlinVersion=' "${TARGET_PROPS}"; then
-              sed -i 's/^kotlinVersion=.*/kotlinVersion=2.0.21/' "${TARGET_PROPS}"
-            else
-              echo 'kotlinVersion=2.0.21' >> "${TARGET_PROPS}"
-            fi
-            echo "? kotlinVersion set to 2.0.21"
-          fi
 
       - name: Setup JDK ${{ inputs.java-version }}
         uses: actions/setup-java@v4
