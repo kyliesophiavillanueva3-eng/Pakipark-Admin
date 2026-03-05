@@ -107,7 +107,8 @@ jobs:
 
           echo "? SonarCloud preflight passed."
 
-      - name: Run SonarCloud Scan
+      - name: Run SonarCloud Scan (PR)
+        if: ${{ github.event_name == 'pull_request' }}
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -124,6 +125,23 @@ jobs:
             -Dsonar.qualitygate.wait=${{ inputs.quality-gate-wait }}
             -Dsonar.pullrequest.provider=GitHub
             -Dsonar.pullrequest.github.repository=${{ github.repository }}
+
+      - name: Run SonarCloud Scan (Branch)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ${{ inputs.working-directory }}
+          args: >
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=${{ inputs.sources-path }}
+            -Dsonar.tests=${{ inputs.tests-path }}
+            -Dsonar.exclusions=${{ inputs.sources-exclusions }}
+            -Dsonar.javascript.lcov.reportPaths=${{ inputs.coverage-report-path }}
+            -Dsonar.qualitygate.wait=${{ inputs.quality-gate-wait }}
 
       - name: Check Quality Gate
         id: quality-gate
