@@ -25,6 +25,9 @@ permissions:
   packages: write
   pull-requests: write
   security-events: write
+  actions: read
+  checks: read
+  statuses: read
 
 concurrency:
   group: master-pipeline-mb-single-caller-${{ github.ref }}
@@ -32,6 +35,7 @@ concurrency:
 
 jobs:
   master-orchestrator:
+    if: ${{ github.event.repository.name != 'central-workflow' }}
     name: "Call Central Mobile Master Pipeline"
     uses: ImplementSprint/central-workflow/.github/workflows/master-pipeline-mobile.yml@main
     with:
