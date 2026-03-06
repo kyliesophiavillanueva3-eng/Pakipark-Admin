@@ -1,5 +1,24 @@
 {
-  "android": {
-    "package": "com.anonymous.templaterepombsingle"
+  "expo": {
+    "name": "Template Repo Mobile Single",
+    "slug": "template-repo-mobile-single",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "templatemobilesingle",
+    "userInterfaceStyle": "automatic",
+    "jsEngine": "hermes",
+    "android": {
+      "package": "com.anonymous.templaterepombsingle"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "2.0.21"
+          }
+        }
+      ]
+    ]
   }
 }
