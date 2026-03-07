@@ -1,7 +1,8 @@
 module.exports = {
   testTimeout: 120000,
   testMatch: ['<rootDir>/tests/e2e/**/*.e2e.ts'],
-  reporters: ['detox/runners/jest/reporter'],
-  testEnvironment: 'detox/runners/jest/testEnvironment',
+  setupFilesAfterEnv: ['<rootDir>/tests/e2e/init.js'],
+  reporters: ['detox/runners/jest/streamlineReporter'],
+  testEnvironment: 'node',
   verbose: true,
 };
