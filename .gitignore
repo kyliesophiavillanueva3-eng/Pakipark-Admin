@@ -1,3 +1,7 @@
 node_modules
-/android
-/ios
+.expo
+coverage
+*.log
+android
+ios
+coverage

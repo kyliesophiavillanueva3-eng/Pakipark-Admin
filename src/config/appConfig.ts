@@ -8,6 +8,8 @@ export type AppConfig = {
   apiBaseUrl: string;
 };
 
+type AppConfigExtra = Partial<AppConfig>;
+
 const allowedEnvironments = new Set<RuntimeEnvironment>(['development', 'staging', 'production']);
 
 export function resolveEnvironment(value: string | undefined): RuntimeEnvironment {
@@ -19,8 +21,8 @@ export function resolveEnvironment(value: string | undefined): RuntimeEnvironmen
 }
 
 export function getAppConfig(): AppConfig {
-  const extra = Constants.expoConfig?.extra as Record<string, string | undefined> | undefined;
-  const appName = extra?.appName ?? 'Template Repo Mobile Single';
+  const extra = Constants.expoConfig?.extra as AppConfigExtra | undefined;
+  const appName = extra?.appName ?? process.env.EXPO_PUBLIC_APP_NAME ?? 'Template Repo Mobile Single';
   const environment = resolveEnvironment(extra?.environment ?? process.env.EXPO_PUBLIC_APP_ENV);
   const apiBaseUrl = extra?.apiBaseUrl ?? process.env.EXPO_PUBLIC_API_BASE_URL ?? 'https://api.example.com';
 

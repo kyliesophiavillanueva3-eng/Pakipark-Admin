@@ -1,8 +1,27 @@
 import type { ExpoConfig } from 'expo/config';
 
+type RuntimeEnvironment = 'development' | 'staging' | 'production';
+
+const defaultAppName = 'Template Repo Mobile Single';
+const defaultEnvironment: RuntimeEnvironment = 'development';
+const defaultApiBaseUrl = 'https://api.example.com';
+const allowedEnvironments = new Set<RuntimeEnvironment>(['development', 'staging', 'production']);
+
+function resolveEnvironment(value: string | undefined): RuntimeEnvironment {
+  if (value && allowedEnvironments.has(value as RuntimeEnvironment)) {
+    return value as RuntimeEnvironment;
+  }
+
+  return defaultEnvironment;
+}
+
 export default function getExpoConfig(): ExpoConfig {
+  const appName = process.env.EXPO_PUBLIC_APP_NAME ?? defaultAppName;
+  const environment = resolveEnvironment(process.env.EXPO_PUBLIC_APP_ENV);
+  const apiBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL ?? defaultApiBaseUrl;
+
   return {
-    name: 'Template Repo Mobile Single',
+    name: appName,
     slug: 'template-repo-mobile-single',
     version: '1.0.0',
     orientation: 'portrait',
@@ -28,5 +47,10 @@ export default function getExpoConfig(): ExpoConfig {
         },
       ],
     ],
+    extra: {
+      appName,
+      environment,
+      apiBaseUrl,
+    },
   };
 }
