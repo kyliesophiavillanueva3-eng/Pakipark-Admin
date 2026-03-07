@@ -16,6 +16,20 @@
     "detox:test": "detox test --configuration android.emu.debug --headless",
     "test:e2e": "npm run detox:test"
   },
+  "detox": {
+    "testRunner": "jest",
+    "runnerConfig": "tests/e2e/jest.config.js",
+    "configurations": {
+      "android.emu.debug": {
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Pixel_5_API_30"
+        },
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && gradlew.bat assembleDebug assembleAndroidTest -DtestBuildType=debug"
+      }
+    }
+  },
   "dependencies": {
     "@react-navigation/native": "^7.1.18",
     "@react-navigation/native-stack": "^7.3.25",
