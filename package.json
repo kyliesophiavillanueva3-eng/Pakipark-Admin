@@ -12,6 +12,7 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "android:prebuild": "expo prebuild --platform android --non-interactive",
+    "eas:build:ios:sim": "eas build --platform ios --profile ios-simulator --non-interactive",
     "detox:build": "detox build --configuration android.emu.debug",
     "detox:test": "detox test --configuration android.emu.debug --headless",
     "test:e2e": "npm run detox:test"
@@ -43,7 +44,7 @@
     "react-native-screens": "~4.16.0"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
+    "@types/jest": "~29.5.14",
     "@types/react": "~19.1.0",
     "detox": "16.5.0",
     "eslint": "^9.39.3",

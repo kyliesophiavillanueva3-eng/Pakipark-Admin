@@ -71,7 +71,7 @@ Recommended value:
   "enable_android_build": true,
   "enable_ios_build": true,
   "eas_profile_android": "production",
-  "eas_profile_ios": "production",
+  "eas_profile_ios": "ios-simulator",
   "version_stream": "mobile-expo"
 }
 ```
@@ -99,7 +99,8 @@ EAS requirements:
 
 iOS CI note:
 
-- Non-interactive iOS builds require credentials to be provisioned in Expo once.
+- Non-interactive iOS device/archive builds require credentials to be provisioned in Expo once.
+- iOS simulator builds do not require distribution certificate or provisioning profile.
 - If CI fails with `Credentials are not set up. Run this command again in interactive mode.`, run locally:
   - `npx --yes eas-cli@latest login`
   - `npx --yes eas-cli@latest credentials -p ios`
