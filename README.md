@@ -96,3 +96,12 @@ EAS requirements:
 - `eas.json` must define the selected build profiles.
 - Each selected profile must set `android.image` and `ios.image`.
 - The app must remain TypeScript-only with strict mode enabled.
+
+iOS CI note:
+
+- Non-interactive iOS builds require credentials to be provisioned in Expo once.
+- If CI fails with `Credentials are not set up. Run this command again in interactive mode.`, run locally:
+  - `npx --yes eas-cli@latest login`
+  - `npx --yes eas-cli@latest credentials -p ios`
+  - Complete Apple login and let EAS create/validate Distribution Certificate and Provisioning Profile.
+- After this one-time setup, CI non-interactive iOS builds can reuse the remote credentials.

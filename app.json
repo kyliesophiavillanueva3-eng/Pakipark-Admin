@@ -11,7 +11,10 @@
       "package": "com.anonymous.templaterepombsingle"
     },
     "ios": {
-      "bundleIdentifier": "com.anonymous.templaterepombsingle"
+      "bundleIdentifier": "com.anonymous.templaterepombsingle",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "plugins": [
       [
