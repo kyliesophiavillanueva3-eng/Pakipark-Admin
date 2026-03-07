@@ -19,7 +19,7 @@
 # Optional overrides (showing defaults):
 #   enable_android_build: true   — Expo Android EAS build stage
 #   eas_profile_android: "production"
-#   eas_profile_ios: "production"
+#   eas_profile_ios: "ios-simulator" (simulator build, no signing credentials)
 #   enable_ios_build: true       — iOS simulator build stage
 #   enable_lint: true
 #   enable_security_scan: true

@@ -39,6 +39,13 @@
         "image": "latest",
         "simulator": false
       }
+    },
+    "ios-simulator": {
+      "distribution": "internal",
+      "ios": {
+        "image": "latest",
+        "simulator": true
+      }
     }
   },
   "submit": {
