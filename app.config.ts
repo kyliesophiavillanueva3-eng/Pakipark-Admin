@@ -1,14 +1,5 @@
 import type { ExpoConfig } from 'expo/config';
 
-const projectId = process.env.EXPO_PROJECT_ID ?? process.env.EAS_PROJECT_ID;
-const owner = process.env.EXPO_OWNER;
-const staticExtra: Record<string, unknown> = {};
-const staticEas = staticExtra.eas as Record<string, unknown> | undefined;
-const easConfig = {
-  ...staticEas,
-  ...(projectId ? { projectId } : {}),
-};
-
 export default function getExpoConfig(): ExpoConfig {
   return {
     name: 'Template Repo Mobile Single',
@@ -37,10 +28,5 @@ export default function getExpoConfig(): ExpoConfig {
         },
       ],
     ],
-    ...(owner ? { owner } : {}),
-    extra: {
-      ...staticExtra,
-      ...(Object.keys(easConfig).length > 0 ? { eas: easConfig } : {}),
-    },
   };
 }
