@@ -1,12 +1,16 @@
-/* global jasmine, beforeAll, beforeEach, afterAll */
+/* global beforeAll, beforeEach, afterAll */
 
 const detox = require('detox');
 const config = require('../../package.json').detox;
 const adapter = require('detox/runners/jest/adapter');
 const specReporter = require('detox/runners/jest/specReporter');
 
-jasmine.getEnv().addReporter(adapter);
-jasmine.getEnv().addReporter(specReporter);
+if (globalThis.detoxCircus) {
+  const environment = globalThis.detoxCircus.getEnv();
+
+  environment.addEventsListener(adapter);
+  environment.addEventsListener(specReporter);
+}
 
 beforeAll(async () => {
   await detox.init(config);

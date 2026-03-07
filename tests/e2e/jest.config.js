@@ -4,6 +4,6 @@ module.exports = {
   testMatch: ['<rootDir>/tests/e2e/**/*.e2e.ts'],
   setupFilesAfterEnv: ['<rootDir>/tests/e2e/init.js'],
   reporters: ['detox/runners/jest/streamlineReporter'],
-  testEnvironment: 'node',
+  testEnvironment: '<rootDir>/tests/e2e/DetoxJestCircusEnvironment.js',
   verbose: true,
 };
