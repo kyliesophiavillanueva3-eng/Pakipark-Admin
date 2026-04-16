@@ -82,17 +82,15 @@ export function AdminProfile({ onBack }: AdminProfileProps) {
 
   return (
     <View style={s.root}>
-      {/* Nav — back left, logo+title centered */}
+      {/* Nav — back left, logo+title spaced out */}
       <View style={s.nav}>
         <TouchableOpacity style={s.backBtn} onPress={onBack} accessibilityLabel="Back">
-          <Ionicons name="arrow-back" size={18} color={colors.navy} />
+          <Ionicons name="arrow-back" size={20} color={colors.navy} />
         </TouchableOpacity>
-        <View style={s.navCenter}>
-          <Image source={require('../../../../assets/pakipark-logo-profile.png')} style={s.navLogo} resizeMode="contain" />
-          <Text style={s.navTitle}>Admin Profile</Text>
-        </View>
-        {/* spacer to balance the back button */}
-        <View style={{ width: 34 }} />
+        <Image source={require('../../../../assets/pakipark-logo-profile.png')} style={s.navLogo} resizeMode="contain" />
+        <Text style={s.navTitle}>Admin Profile</Text>
+        {/* spacer to balance */}
+        <View style={{ flex: 1 }} />
       </View>
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
@@ -327,11 +325,10 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#F3F4F6' },
 
   // Nav
-  nav: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#fff', paddingHorizontal: spacing.lg, paddingTop: spacing.xl + spacing.sm, paddingBottom: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
-  backBtn: { width: 34, height: 34, borderRadius: 17, backgroundColor: '#F1F5F9', alignItems: 'center', justifyContent: 'center' },
-  navCenter: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  navLogo: { height: 32, width: 32 },
-  navTitle: { fontSize: 16, fontWeight: '800', color: colors.navy },
+  nav: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: '#fff', paddingHorizontal: spacing.lg, paddingTop: spacing.xl + spacing.sm, paddingBottom: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
+  backBtn: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#F1F5F9', alignItems: 'center', justifyContent: 'center' },
+  navLogo: { height: 44, width: 90 },
+  navTitle: { fontSize: 20, fontWeight: '800', color: colors.navy, marginLeft: spacing.sm },
 
   scroll: { padding: spacing.lg, gap: spacing.md, paddingBottom: 32 },
 
