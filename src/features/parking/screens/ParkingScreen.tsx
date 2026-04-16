@@ -48,10 +48,11 @@ const styles = StyleSheet.create({
   subtitle: { fontSize: 14, color: colors.muted, textAlign: 'center', lineHeight: 20 },
   btn: {
     flexDirection: 'row', alignItems: 'center', gap: spacing.sm,
-    backgroundColor: colors.orange, borderRadius: 14,
-    paddingVertical: spacing.md, paddingHorizontal: spacing.lg,
+    backgroundColor: colors.orange, borderRadius: 20,
+    paddingVertical: spacing.xl, paddingHorizontal: spacing.lg,
     width: '100%', justifyContent: 'center',
+    minHeight: 90,
   },
-  btnText: { color: '#fff', fontWeight: '700', fontSize: 15, textAlign: 'center' },
+  btnText: { color: '#fff', fontWeight: '800', fontSize: 17, textAlign: 'center', flex: 1, lineHeight: 24 },
   hint: { fontSize: 12, color: colors.muted },
 });
