@@ -1,4 +1,3 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -9,21 +8,29 @@ export function ParkingScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
       <View style={styles.card}>
+
+        {/* Parking "P" sign icon — matches prototype */}
         <View style={styles.iconWrap}>
-          <MaterialCommunityIcons name="parking" size={40} color={colors.orange} />
+          <View style={styles.pSign}>
+            <Text style={styles.pLetter}>P</Text>
+          </View>
         </View>
+
         <Text style={styles.title}>Parking{'\n'}Customization</Text>
+
         <Text style={styles.subtitle}>
           To manage your parking layout, slots, and availability, please open the full website editor.
         </Text>
+
         <TouchableOpacity
           style={styles.btn}
           accessibilityLabel="Open Website to Customize Parking"
           onPress={() => Linking.openURL('https://pakipark.com')}
         >
-          <Text style={styles.btnText}>Open Website to Customize Parking</Text>
-          <Ionicons name="open-outline" size={18} color="#fff" />
+          <Text style={styles.btnText}>Open Website to{'\n'}Customize Parking</Text>
+          <Ionicons name="open-outline" size={16} color="#fff" />
         </TouchableOpacity>
+
         <Text style={styles.hint}>Opens in a new tab</Text>
       </View>
     </ScrollView>
@@ -31,28 +38,88 @@ export function ParkingScreen() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { flexGrow: 1, padding: spacing.lg, justifyContent: 'center' },
+  scroll: {
+    flexGrow: 1,
+    padding: spacing.lg,
+    justifyContent: 'center',
+  },
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 20, padding: spacing.xl,
-    alignItems: 'center', gap: spacing.md,
-    shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 8, shadowOffset: { width: 0, height: 2 },
+    borderRadius: 24,
+    paddingVertical: 40,
+    paddingHorizontal: spacing.xl,
+    alignItems: 'center',
+    gap: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
+
+  // Peach rounded-square background
   iconWrap: {
-    width: 80, height: 80, borderRadius: 20,
-    backgroundColor: '#FFF0E6',
-    alignItems: 'center', justifyContent: 'center',
+    width: 100,
+    height: 100,
+    borderRadius: 24,
+    backgroundColor: '#FDEBD0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
   },
-  title: { fontSize: 26, fontWeight: '800', color: colors.navy, textAlign: 'center', lineHeight: 32 },
-  subtitle: { fontSize: 14, color: colors.muted, textAlign: 'center', lineHeight: 20 },
+  // Outlined "P" parking sign inside
+  pSign: {
+    width: 56,
+    height: 56,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: colors.orange,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pLetter: {
+    fontSize: 30,
+    fontWeight: '900',
+    color: colors.orange,
+    lineHeight: 36,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: '900',
+    color: colors.navy,
+    textAlign: 'center',
+    lineHeight: 34,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: colors.muted,
+    textAlign: 'center',
+    lineHeight: 21,
+    paddingHorizontal: spacing.sm,
+  },
+
   btn: {
-    flexDirection: 'row', alignItems: 'center', gap: spacing.sm,
-    backgroundColor: colors.orange, borderRadius: 20,
-    paddingVertical: spacing.xl, paddingHorizontal: spacing.lg,
-    width: '100%', justifyContent: 'center',
-    minHeight: 90,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    backgroundColor: colors.orange,
+    borderRadius: 18,
+    paddingVertical: 20,
+    paddingHorizontal: spacing.xl,
+    width: '100%',
+    marginTop: 4,
   },
-  btnText: { color: '#fff', fontWeight: '800', fontSize: 17, textAlign: 'center', flex: 1, lineHeight: 24 },
-  hint: { fontSize: 12, color: colors.muted },
+  btnText: {
+    color: '#fff',
+    fontWeight: '800',
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  hint: {
+    fontSize: 12,
+    color: colors.muted,
+  },
 });

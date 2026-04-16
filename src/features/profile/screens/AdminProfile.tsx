@@ -82,15 +82,15 @@ export function AdminProfile({ onBack }: AdminProfileProps) {
 
   return (
     <View style={s.root}>
-      {/* Nav — back left, logo+title spaced out */}
+      {/* Nav — back left, logo left, title centered */}
       <View style={s.nav}>
         <TouchableOpacity style={s.backBtn} onPress={onBack} accessibilityLabel="Back">
           <Ionicons name="arrow-back" size={20} color={colors.navy} />
         </TouchableOpacity>
         <Image source={require('../../../../assets/pakipark-logo-profile.png')} style={s.navLogo} resizeMode="contain" />
         <Text style={s.navTitle}>Admin Profile</Text>
-        {/* spacer to balance */}
-        <View style={{ flex: 1 }} />
+        {/* right spacer = back btn width + logo width + gaps so title is visually centered */}
+        <View style={{ width: 34 }} />
       </View>
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
@@ -325,10 +325,10 @@ const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#F3F4F6' },
 
   // Nav
-  nav: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: '#fff', paddingHorizontal: spacing.lg, paddingTop: spacing.xl + spacing.sm, paddingBottom: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
+  nav: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', paddingHorizontal: spacing.lg, paddingTop: spacing.xl + spacing.sm, paddingBottom: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
   backBtn: { width: 38, height: 38, borderRadius: 19, backgroundColor: '#F1F5F9', alignItems: 'center', justifyContent: 'center' },
-  navLogo: { height: 44, width: 90 },
-  navTitle: { fontSize: 20, fontWeight: '800', color: colors.navy, marginLeft: spacing.sm },
+  navLogo: { height: 38, width: 76, marginLeft: spacing.sm },
+  navTitle: { flex: 1, fontSize: 20, fontWeight: '800', color: colors.navy, textAlign: 'center', marginRight: 20 },
 
   scroll: { padding: spacing.lg, gap: spacing.md, paddingBottom: 32 },
 
@@ -338,7 +338,7 @@ const s = StyleSheet.create({
   avatarBox: { width: 80, height: 80, borderRadius: 18, backgroundColor: colors.orange, alignItems: 'center', justifyContent: 'center' },
   avatarImg: { width: 80, height: 80, borderRadius: 18 },
   avatarText: { fontSize: 28, fontWeight: '900', color: '#fff' },
-  cameraBtn: { position: 'absolute', bottom: -4, right: -4, width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.3)' },
+  cameraBtn: { position: 'absolute', bottom: -4, right: -4, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.orange, alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: '#1E3D5A' },
   heroName: { fontSize: 22, fontWeight: '900', color: '#fff' },
   heroEmail: { fontSize: 13, color: 'rgba(255,255,255,0.6)' },
   badgeRow: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap', justifyContent: 'center' },
