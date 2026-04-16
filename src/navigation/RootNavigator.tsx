@@ -30,7 +30,7 @@ export function RootNavigator() {
           contentStyle: { backgroundColor: colors.background },
         }}
       >
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Expo TS Boilerplate' }} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

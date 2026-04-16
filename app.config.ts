@@ -6,7 +6,7 @@ type RuntimeEnvironment = 'development' | 'staging' | 'production';
 const defaultAppName = 'Template Repo Mobile Single';
 const defaultEnvironment: RuntimeEnvironment = 'development';
 const defaultApiBaseUrl = 'https://api.example.com';
-const kotlinVersion = '2.0.21';
+const kotlinVersion = '1.9.23';
 const allowedEnvironments = new Set<RuntimeEnvironment>(['development', 'staging', 'production']);
 
 function withCiKotlinGradleProperty(config: ExpoConfig): ExpoConfig {
