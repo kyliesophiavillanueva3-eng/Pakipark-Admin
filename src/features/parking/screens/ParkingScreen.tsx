@@ -2,36 +2,40 @@ import { Ionicons } from '@expo/vector-icons';
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { colors } from '@theme/colors';
-import { spacing } from '@theme/spacing';
 
 export function ParkingScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
       <View style={styles.card}>
 
-        {/* Parking "P" sign icon — matches prototype */}
+        {/* Icon — top, centered, large peach bg */}
         <View style={styles.iconWrap}>
           <View style={styles.pSign}>
             <Text style={styles.pLetter}>P</Text>
           </View>
         </View>
 
-        <Text style={styles.title}>Parking{'\n'}Customization</Text>
+        {/* Big gap then title */}
+        <View style={styles.textBlock}>
+          <Text style={styles.title}>Parking{'\n'}Customization</Text>
+          <Text style={styles.subtitle}>
+            To manage your parking layout,{'\n'}slots, and availability, please open{'\n'}the full website editor.
+          </Text>
+        </View>
 
-        <Text style={styles.subtitle}>
-          To manage your parking layout, slots, and availability, please open the full website editor.
-        </Text>
+        {/* Button with gap above */}
+        <View style={styles.btnBlock}>
+          <TouchableOpacity
+            style={styles.btn}
+            accessibilityLabel="Open Website to Customize Parking"
+            onPress={() => Linking.openURL('https://pakipark.com')}
+          >
+            <Text style={styles.btnText}>Open Website to{'\n'}Customize{'\n'}Parking</Text>
+            <Ionicons name="open-outline" size={18} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.hint}>Opens in a new tab</Text>
+        </View>
 
-        <TouchableOpacity
-          style={styles.btn}
-          accessibilityLabel="Open Website to Customize Parking"
-          onPress={() => Linking.openURL('https://pakipark.com')}
-        >
-          <Text style={styles.btnText}>Open Website to{'\n'}Customize Parking</Text>
-          <Ionicons name="open-outline" size={16} color="#fff" />
-        </TouchableOpacity>
-
-        <Text style={styles.hint}>Opens in a new tab</Text>
       </View>
     </ScrollView>
   );
@@ -40,37 +44,38 @@ export function ParkingScreen() {
 const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
-    padding: spacing.lg,
+    padding: 16,
     justifyContent: 'center',
   },
+
   card: {
-    backgroundColor: colors.surface,
-    borderRadius: 24,
-    paddingVertical: 40,
-    paddingHorizontal: spacing.xl,
+    backgroundColor: '#fff',
+    borderRadius: 28,
+    paddingTop: 52,
+    paddingBottom: 44,
+    paddingHorizontal: 28,
     alignItems: 'center',
-    gap: 20,
     shadowColor: '#000',
     shadowOpacity: 0.06,
-    shadowRadius: 10,
+    shadowRadius: 12,
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
 
-  // Peach rounded-square background
+  // Peach rounded square
   iconWrap: {
-    width: 100,
-    height: 100,
-    borderRadius: 24,
+    width: 110,
+    height: 110,
+    borderRadius: 28,
     backgroundColor: '#FDEBD0',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: 40,
   },
-  // Outlined "P" parking sign inside
+  // Outlined P sign
   pSign: {
-    width: 56,
-    height: 56,
+    width: 60,
+    height: 60,
     borderRadius: 10,
     borderWidth: 3,
     borderColor: colors.orange,
@@ -78,48 +83,58 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pLetter: {
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: '900',
     color: colors.orange,
-    lineHeight: 36,
+    lineHeight: 38,
   },
 
+  // Title + subtitle block
+  textBlock: {
+    alignItems: 'center',
+    gap: 16,
+    marginBottom: 40,
+  },
   title: {
-    fontSize: 28,
+    fontSize: 34,
     fontWeight: '900',
     color: colors.navy,
     textAlign: 'center',
-    lineHeight: 34,
+    lineHeight: 40,
   },
   subtitle: {
-    fontSize: 14,
-    color: colors.muted,
+    fontSize: 15,
+    color: '#9CA3AF',
     textAlign: 'center',
-    lineHeight: 21,
-    paddingHorizontal: spacing.sm,
+    lineHeight: 23,
   },
 
+  // Button + hint block
+  btnBlock: {
+    width: '100%',
+    alignItems: 'center',
+    gap: 14,
+  },
   btn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
+    gap: 12,
     backgroundColor: colors.orange,
-    borderRadius: 18,
-    paddingVertical: 20,
-    paddingHorizontal: spacing.xl,
-    width: '100%',
-    marginTop: 4,
+    borderRadius: 20,
+    paddingVertical: 22,
+    paddingHorizontal: 28,
+    width: '90%',
   },
   btnText: {
     color: '#fff',
     fontWeight: '800',
-    fontSize: 16,
+    fontSize: 17,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 24,
   },
   hint: {
-    fontSize: 12,
-    color: colors.muted,
+    fontSize: 13,
+    color: '#9CA3AF',
   },
 });
