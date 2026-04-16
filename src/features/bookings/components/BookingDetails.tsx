@@ -42,11 +42,11 @@ const STATUS_CFG = {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function BookingDetails({ booking, isOpen, onClose, onCancel }: BookingDetailsProps) {
-  if (!booking) return null;
-  const st = STATUS_CFG[booking.status];
-
   const [exporting, setExporting] = useState<'idle' | 'loading' | 'done'>('idle');
   const spinAnim = useRef(new Animated.Value(0)).current;
+
+  if (!booking) return null;
+  const st = STATUS_CFG[booking.status];
 
   useEffect(() => {
     if (!isOpen) setExporting('idle');

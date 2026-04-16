@@ -74,7 +74,6 @@ function Header({
       {/* Dropdown */}
       {dropdownOpen && (
         <View style={styles.dropdown}>
-          <Text style={styles.dropdownName}>{adminName}</Text>
           <View style={styles.dropdownDivider} />
           <TouchableOpacity style={styles.dropdownItem} onPress={() => { onProfile(); onToggleDropdown(); }}>
             <Ionicons name="person-outline" size={15} color={colors.muted} />
