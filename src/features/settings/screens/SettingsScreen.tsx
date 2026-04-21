@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Switch,
@@ -332,40 +334,42 @@ export function SettingsScreen() {
 
       {/* Rate Form Modal */}
       <Modal visible={rateModal} transparent animationType="slide" onRequestClose={() => setRateModal(false)}>
-        <View style={s.modalOverlay}>
-          <TouchableOpacity style={StyleSheet.absoluteFillObject} onPress={() => setRateModal(false)} activeOpacity={1} />
-          <View style={s.modalSheet}>
-            <View style={s.modalHeader}>
-              <Text style={s.modalTitle}>{editingRate ? 'Edit Rate' : 'Add New Rate'}</Text>
-              <TouchableOpacity onPress={() => setRateModal(false)} accessibilityLabel="Close">
-                <Ionicons name="close" size={20} color="#fff" />
-              </TouchableOpacity>
-            </View>
-            <View style={s.modalBody}>
-              <Text style={s.modalLabel}>VEHICLE TYPE</Text>
-              <TextInput style={s.modalInput} placeholder="e.g. Sedan, SUV, Motorcycle" value={rateForm.vehicleType} onChangeText={(v) => setRateForm({ ...rateForm, vehicleType: v })} placeholderTextColor={colors.muted} />
-              <View style={{ flexDirection: 'row', gap: spacing.md }}>
-                <View style={{ flex: 1 }}>
-                  <Text style={s.modalLabel}>HOURLY (₱)</Text>
-                  <TextInput style={s.modalInput} keyboardType="numeric" placeholder="50" value={rateForm.hourlyRate} onChangeText={(v) => setRateForm({ ...rateForm, hourlyRate: v })} placeholderTextColor={colors.muted} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={s.modalLabel}>DAILY (₱)</Text>
-                  <TextInput style={s.modalInput} keyboardType="numeric" placeholder="300" value={rateForm.dailyRate} onChangeText={(v) => setRateForm({ ...rateForm, dailyRate: v })} placeholderTextColor={colors.muted} />
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+          <View style={s.modalOverlay}>
+            <TouchableOpacity style={StyleSheet.absoluteFillObject} onPress={() => setRateModal(false)} activeOpacity={1} />
+            <View style={s.modalSheet}>
+              <View style={s.modalHeader}>
+                <Text style={s.modalTitle}>{editingRate ? 'Edit Rate' : 'Add New Rate'}</Text>
+                <TouchableOpacity onPress={() => setRateModal(false)} accessibilityLabel="Close">
+                  <Ionicons name="close" size={20} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <View style={s.modalBody}>
+                <Text style={s.modalLabel}>VEHICLE TYPE</Text>
+                <TextInput style={s.modalInput} placeholder="e.g. Sedan, SUV, Motorcycle" value={rateForm.vehicleType} onChangeText={(v) => setRateForm({ ...rateForm, vehicleType: v })} placeholderTextColor={colors.muted} />
+                <View style={{ flexDirection: 'row', gap: spacing.md }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={s.modalLabel}>HOURLY (₱)</Text>
+                    <TextInput style={s.modalInput} keyboardType="numeric" placeholder="50" value={rateForm.hourlyRate} onChangeText={(v) => setRateForm({ ...rateForm, hourlyRate: v })} placeholderTextColor={colors.muted} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={s.modalLabel}>DAILY (₱)</Text>
+                    <TextInput style={s.modalInput} keyboardType="numeric" placeholder="300" value={rateForm.dailyRate} onChangeText={(v) => setRateForm({ ...rateForm, dailyRate: v })} placeholderTextColor={colors.muted} />
+                  </View>
                 </View>
               </View>
-            </View>
-            <View style={s.modalFooter}>
-              <TouchableOpacity style={s.modalCancelBtn} onPress={() => setRateModal(false)}>
-                <Text style={s.modalCancelText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={s.modalSaveBtn} onPress={saveRate}>
-                <Ionicons name="save-outline" size={14} color="#fff" />
-                <Text style={s.modalSaveText}>{editingRate ? 'Update Rate' : 'Save Rate'}</Text>
-              </TouchableOpacity>
+              <View style={s.modalFooter}>
+                <TouchableOpacity style={s.modalCancelBtn} onPress={() => setRateModal(false)}>
+                  <Text style={s.modalCancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={s.modalSaveBtn} onPress={saveRate}>
+                  <Ionicons name="save-outline" size={14} color="#fff" />
+                  <Text style={s.modalSaveText}>{editingRate ? 'Update Rate' : 'Save Rate'}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

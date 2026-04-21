@@ -1,5 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { BookingsScreen } from '@features/bookings/screens/BookingsScreen';
@@ -39,17 +39,18 @@ const RECENT_BOOKINGS: Booking[] = [
 // ── Header ────────────────────────────────────────────────────────────────────
 
 function Header({
-  onGuide, onNotif, onProfile, onSettings, onLogout, adminName, dropdownOpen, onToggleDropdown, highlightLogo, highlightHelp,
+  onGuide, onNotif, onProfile, onSettings, onLogout, adminName, dropdownOpen, onToggleDropdown, highlightLogo, highlightHelp, logoRef,
 }: {
   onGuide: () => void; onNotif: () => void; onProfile: () => void;
   onSettings: () => void; onLogout: () => void;
   adminName: string; dropdownOpen: boolean; onToggleDropdown: () => void;
   highlightLogo?: boolean; highlightHelp?: boolean;
+  logoRef?: React.RefObject<View>;
 }) {
   return (
     <View style={styles.header}>
       {/* Logo with optional orange highlight box */}
-      <View style={[styles.headerLogo, highlightLogo && styles.logoHighlight]}>
+      <View ref={logoRef} style={[styles.headerLogo, highlightLogo && styles.logoHighlight]}>
         <Image source={require('../../../../assets/pakipark-logo.png')} style={styles.logoImg} resizeMode="contain" />
       </View>
 
@@ -74,7 +75,6 @@ function Header({
       {/* Dropdown */}
       {dropdownOpen && (
         <View style={styles.dropdown}>
-          <View style={styles.dropdownDivider} />
           <TouchableOpacity style={styles.dropdownItem} onPress={() => { onProfile(); onToggleDropdown(); }}>
             <Ionicons name="person-outline" size={15} color={colors.muted} />
             <Text style={styles.dropdownItemText}>Profile</Text>
@@ -186,6 +186,14 @@ export function HomeScreen() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
   const adminName = 'Admin';
+  const logoRef = useRef<View>(null);
+  const [logoHole, setLogoHole] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+
+  const measureLogo = () => {
+    logoRef.current?.measureInWindow((x, y, width, height) => {
+      setLogoHole({ x: x - 3, y: y - 3, w: width + 6, h: height + 6 });
+    });
+  };
 
   if (showProfile) {
     return <AdminProfile onBack={() => setShowProfile(false)} />;
@@ -199,7 +207,7 @@ export function HomeScreen() {
       )}
 
       <Header
-        onGuide={() => { setTutorialStep(0); setTutorialOpen(true); }}
+        onGuide={() => { measureLogo(); setTutorialStep(0); setTutorialOpen(true); }}
         onNotif={() => setNotifOpen(true)}
         onProfile={() => setShowProfile(true)}
         onSettings={() => setActiveTab('settings')}
@@ -209,6 +217,7 @@ export function HomeScreen() {
         onToggleDropdown={() => setDropdownOpen((v) => !v)}
         highlightLogo={tutorialOpen && tutorialStep === 0}
         highlightHelp={tutorialOpen && tutorialStep === 4}
+        logoRef={logoRef}
       />
 
       {activeTab === 'dashboard' && (
@@ -308,6 +317,7 @@ export function HomeScreen() {
         onClose={() => setTutorialOpen(false)}
         onNavigate={(tab) => setActiveTab(tab as TabId)}
         onStepChange={(s) => setTutorialStep(s)}
+        logoHole={logoHole}
       />
 
       {/* Notifications */}

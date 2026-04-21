@@ -36,7 +36,7 @@ interface BookingDetailsProps {
 const STATUS_CFG = {
   active:    { label: 'Active',    dot: '#10B981', text: '#065F46', bg: '#D1FAE5' },
   completed: { label: 'Completed', dot: '#3B82F6', text: '#1E40AF', bg: '#DBEAFE' },
-  cancelled: { label: 'Cancelled', dot: '#EF4444', text: '#991B1B', bg: '#FEE2E2' },
+  cancelled: { label: 'Cancelled', dot: '#EF4444', text: '#991B1B', bg: '#fff'    },
 };
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -44,9 +44,6 @@ const STATUS_CFG = {
 export function BookingDetails({ booking, isOpen, onClose, onCancel }: BookingDetailsProps) {
   const [exporting, setExporting] = useState<'idle' | 'loading' | 'done'>('idle');
   const spinAnim = useRef(new Animated.Value(0)).current;
-
-  if (!booking) return null;
-  const st = STATUS_CFG[booking.status];
 
   useEffect(() => {
     if (!isOpen) setExporting('idle');
@@ -70,6 +67,10 @@ export function BookingDetails({ booking, isOpen, onClose, onCancel }: BookingDe
   };
 
   const spin = spinAnim.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
+
+  // Early return AFTER all hooks
+  if (!booking) return null;
+  const st = STATUS_CFG[booking.status];
 
   return (
     <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
@@ -98,7 +99,7 @@ export function BookingDetails({ booking, isOpen, onClose, onCancel }: BookingDe
             <Text style={s.phone}>{booking.phone}</Text>
 
             {/* Status pill */}
-            <View style={[s.statusPill, { backgroundColor: st.bg }]}>
+            <View style={[s.statusPill, { backgroundColor: st.bg, borderWidth: booking.status === 'cancelled' ? 1 : 0, borderColor: '#FECACA' }]}>
               <View style={[s.statusDot, { backgroundColor: st.dot }]} />
               <Text style={[s.statusText, { color: st.text }]}>{st.label}</Text>
             </View>

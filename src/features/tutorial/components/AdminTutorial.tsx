@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 
-const { width: SW } = Dimensions.get('window');
+const { width: SW, height: SH } = Dimensions.get('window');
 const TAB_BAR_HEIGHT = 70;
 const DIM = 'rgba(0,0,0,0.60)';
 
@@ -22,8 +22,9 @@ interface Step {
   iconName: string;
   targetTab?: string;
   mascot: string;
-  spotlightTab: number;   // tab index 0-3, -1 = none
-  spotlightHelp?: boolean; // highlight the ? button in header
+  spotlightTab: number;
+  spotlightHelp?: boolean;
+  spotlightLogo?: boolean;
 }
 
 interface AdminTutorialProps {
@@ -31,13 +32,15 @@ interface AdminTutorialProps {
   onClose: () => void;
   onNavigate: (tab: string) => void;
   onStepChange?: (step: number) => void;
+  logoHole?: { x: number; y: number; w: number; h: number } | null;
 }
 
 const STEPS: Step[] = [
   {
     stepLabel: 'STEP 1 OF 5', title: 'WELCOME, ADMIN!',
     description: 'This guide will walk you through the PakiPark Admin System. Manage slots, bookings, and analytics all in one place.',
-    iconName: 'grid-outline', mascot: 'https://i.imgur.com/eX4KbNU.png', spotlightTab: -1,
+    iconName: 'grid-outline', mascot: 'https://i.imgur.com/eX4KbNU.png',
+    spotlightTab: -1, spotlightLogo: true,
   },
   {
     stepLabel: 'STEP 2 OF 5', title: 'DASHBOARD OVERVIEW',
@@ -62,7 +65,6 @@ const STEPS: Step[] = [
   },
 ];
 
-// Tab icons matching HomeScreen
 const TAB_ICONS = [
   { icon: 'grid' as const,                  label: 'Dashboard' },
   { icon: 'car-outline' as const,           label: 'Parking'   },
@@ -70,13 +72,30 @@ const TAB_ICONS = [
   { icon: 'settings-outline' as const,      label: 'Settings'  },
 ];
 
-export function AdminTutorial({ isOpen, onClose, onNavigate, onStepChange }: AdminTutorialProps) {
+// ── Hollow dim: renders 4 dim rects around a "hole" so the real element shows through ──
+// hole: { x, y, width, height } in screen coords (from top-left)
+function HollowDim({ hole }: { hole: { x: number; y: number; w: number; h: number } }) {
+  const { x, y, w, h } = hole;
+  return (
+    <>
+      {/* Top strip */}
+      <View style={[StyleSheet.absoluteFillObject, { bottom: SH - y, backgroundColor: DIM }]} pointerEvents="none" />
+      {/* Bottom strip */}
+      <View style={[StyleSheet.absoluteFillObject, { top: y + h, backgroundColor: DIM }]} pointerEvents="none" />
+      {/* Left strip (same row as hole) */}
+      <View style={{ position: 'absolute', top: y, left: 0, width: x, height: h, backgroundColor: DIM }} pointerEvents="none" />
+      {/* Right strip (same row as hole) */}
+      <View style={{ position: 'absolute', top: y, left: x + w, right: 0, height: h, backgroundColor: DIM }} pointerEvents="none" />
+    </>
+  );
+}
+
+export function AdminTutorial({ isOpen, onClose, onNavigate, onStepChange, logoHole: measuredLogoHole }: AdminTutorialProps) {
   const [step, setStep] = useState(0);
   const mascotAnim = useRef(new Animated.Value(0)).current;
 
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
-  const isTop = step === 0 || current.spotlightHelp;
 
   useEffect(() => {
     if (isOpen) { setStep(0); onStepChange?.(0); }
@@ -85,7 +104,6 @@ export function AdminTutorial({ isOpen, onClose, onNavigate, onStepChange }: Adm
   useEffect(() => {
     if (!isOpen) return;
     onStepChange?.(step);
-    // Navigate to the relevant tab immediately when step changes
     if (current.targetTab) onNavigate(current.targetTab);
     mascotAnim.setValue(0);
     Animated.spring(mascotAnim, { toValue: 1, useNativeDriver: true, tension: 100, friction: 7 }).start();
@@ -100,6 +118,19 @@ export function AdminTutorial({ isOpen, onClose, onNavigate, onStepChange }: Adm
   const tabW = SW / 4;
   const spotIdx = current.spotlightTab;
   const spotX = spotIdx >= 0 ? spotIdx * tabW : -1;
+
+  // Use measured position if available, fallback to estimate
+  const LOGO_HOLE = measuredLogoHole ?? { x: 2, y: 46, w: 130, h: 64 };
+
+  // ── ? button hole coords ──
+  // Header paddingHorizontal:16, gap:10 between icons (36px each)
+  // From right: avatar(36)+gap(10)+bell(36)+gap(10)+?(36) = 128 from right edge
+  // ? left = SW - 16 - 128 + 82 = SW - 144 + 82... recalc:
+  // rightmost icon right edge = SW-16, avatar left = SW-16-36 = SW-52
+  // bell left = SW-52-10-36 = SW-98
+  // ? left = SW-98-10-36 = SW-144
+  // center Y of header = 52 + (52+14)/2 = 85, icon is 36px → y = 85-18 = 67
+  const HELP_HOLE = { x: SW - 146, y: 57, w: 40, h: 40 };
 
   const Card = (
     <View style={s.container}>
@@ -153,27 +184,17 @@ export function AdminTutorial({ isOpen, onClose, onNavigate, onStepChange }: Adm
       <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
 
         {spotIdx >= 0 ? (
-          // ── Spotlight layout: dim everything EXCEPT the spotlit tab ──
+          // ── Steps 2-4: spotlight a bottom tab ──
           <>
-            {/* Full dim layer */}
             <View style={[StyleSheet.absoluteFill, { backgroundColor: DIM }]} pointerEvents="none" />
-
-            {/* Re-render the spotlit tab on top of the dim, fully bright */}
             <View
               pointerEvents="none"
               style={{
-                position: 'absolute',
-                bottom: 0,
-                left: spotX,
-                width: tabW,
-                height: TAB_BAR_HEIGHT,
+                position: 'absolute', bottom: 0, left: spotX,
+                width: tabW, height: TAB_BAR_HEIGHT,
                 backgroundColor: '#FFFFFF',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 3,
-                borderWidth: 3,
-                borderColor: '#EE6B20',
-                borderRadius: 16,
+                alignItems: 'center', justifyContent: 'center', gap: 3,
+                borderWidth: 3, borderColor: '#EE6B20', borderRadius: 16,
               }}
             >
               <Ionicons name={TAB_ICONS[spotIdx].icon} size={24} color="#EE6B20" />
@@ -181,44 +202,26 @@ export function AdminTutorial({ isOpen, onClose, onNavigate, onStepChange }: Adm
                 {TAB_ICONS[spotIdx].label}
               </Text>
             </View>
+            <View style={s.overlayBottom} pointerEvents="box-none">{Card}</View>
+          </>
 
-            {/* Card at bottom */}
-            <View style={s.overlayBottom} pointerEvents="box-none">
-              {Card}
-            </View>
-          </>
-        ) : current.spotlightHelp ? (
-          // ── Step 5: spotlight the ? help button in header ──
+        ) : current.spotlightLogo ? (
+          // ── Step 1: hollow dim around the logo (top-left) ──
           <>
-            <View style={[StyleSheet.absoluteFill, { backgroundColor: DIM }]} pointerEvents="none" />
-            {/* Bright spotlight — rounded square over the ? button */}
-            {/* Header right: avatar(36) + gap(10) + bell(36) + gap(10) + ?(36) + paddingRight(16) */}
-            <View
-              pointerEvents="none"
-              style={{
-                position: 'absolute',
-                top: 42,
-                right: 108, // 16 + 36(avatar) + 10 + 36(bell) + 10 = 108 from right
-                width: 46, height: 46,
-                backgroundColor: '#FFFFFF',
-                borderRadius: 14,
-                borderWidth: 3,
-                borderColor: '#EE6B20',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Ionicons name="help-circle-outline" size={24} color="#1E3D5A" />
-            </View>
-            {/* Card upper position */}
-            <View style={[s.overlay, s.overlayTop]} pointerEvents="box-none">
-              {Card}
-            </View>
+            <HollowDim hole={LOGO_HOLE} />
+            <View style={s.overlayBottom} pointerEvents="box-none">{Card}</View>
           </>
+
+        ) : current.spotlightHelp ? (
+          // ── Step 5: hollow dim around the ? button (top-right) ──
+          <>
+            <HollowDim hole={HELP_HOLE} />
+            <View style={s.overlayBottom} pointerEvents="box-none">{Card}</View>
+          </>
+
         ) : (
-          // ── No spotlight: simple full dim with card ──
-          <View style={[s.overlay, isTop ? s.overlayTop : s.overlayBottom]} pointerEvents="box-none">
-            {Card}
+          <View style={[StyleSheet.absoluteFill, { backgroundColor: DIM }]} pointerEvents="box-none">
+            <View style={[s.overlayTop]}>{Card}</View>
           </View>
         )}
 
@@ -228,8 +231,9 @@ export function AdminTutorial({ isOpen, onClose, onNavigate, onStepChange }: Adm
 }
 
 const s = StyleSheet.create({
-  overlay: { flex: 1, backgroundColor: DIM, paddingHorizontal: 16 },
-  overlayTop: { paddingTop: 80, justifyContent: 'flex-start' },
+  overlayTop: {
+    position: 'absolute', top: 130, left: 16, right: 16,
+  },
   overlayBottom: {
     position: 'absolute', bottom: TAB_BAR_HEIGHT + 8, left: 16, right: 16,
   },

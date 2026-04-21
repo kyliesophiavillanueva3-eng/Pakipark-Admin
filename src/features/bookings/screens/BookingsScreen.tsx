@@ -66,15 +66,24 @@ export function BookingsScreen() {
     cancelled: bookings.filter((b) => b.status === 'cancelled').length,
   };
 
+  const PAYMENT_MAP: Record<string, string> = {
+    '1': 'GCash',
+    '2': 'Cash on Site',
+    '3': 'Cash on Site',
+    '4': 'Credit/Debit Card',
+  };
+
   const openDetails = (b: Booking) => {
+    // Always read from live bookings state so cancelled status is reflected
+    const live = bookings.find((x) => x.id === b.id) ?? b;
     setSelected({
-      id: b.id, reference: b.ref, name: b.name,
-      location: b.location, address: b.address,
-      spot: b.ref.split('-')[2] ?? 'A-01',
-      date: b.date, time: b.time, vehicle: b.vehicle,
-      phone: b.phone,
-      status: b.status, type: 'Fixed', amount: b.total,
-      payment: 'GCash',
+      id: live.id, reference: live.ref, name: live.name,
+      location: live.location, address: live.address,
+      spot: live.ref.split('-')[2] ?? 'A-01',
+      date: live.date, time: live.time, vehicle: live.vehicle,
+      phone: live.phone,
+      status: live.status, type: 'Fixed', amount: live.total,
+      payment: PAYMENT_MAP[live.id] ?? 'GCash',
     });
     setDetailsOpen(true);
   };
